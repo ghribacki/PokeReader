@@ -207,7 +207,18 @@ pub fn draw_pkx(pkx: &impl Pkx, pkx_type: PkxType) {
     let nature = pkx.nature_t();
     let nature_stat = nature_stat(nature);
 
-    pnp::println!("{} {}", nature, species);
+    // Which Dunsparce evolved form it will have if it's a Dunsparce
+    let dunsparce_segments = if pkx.species() == 206 {
+        if pkx.encryption_constant() % 100 == 0 {
+            "(3-seg)"
+        } else {
+            "(2-seg)"
+        }
+    } else {
+        ""
+    };
+
+    pnp::println!("{} {} {}", nature, species, dunsparce_segments);
     pnp::println!("Ability: ({}) {}", pkx.ability_number_t(), ability);
     pnp::println!("PID: {:08X}", pkx.pid());
     pnp::println!(color = shiny_color, "PSV: {:04}, {}", pkx.psv(), shiny_type);
