@@ -3,7 +3,7 @@ use crate::alloc::string::ToString;
 use crate::crystal::CRYSTAL_CYAN;
 use crate::pnp;
 use crate::{GIT_HASH, VERSION};
-use pkm_rs::{Nature, Pkx, Shiny};
+use pkm_rs::{Nature, Pkx, Shiny, Species};
 
 pub const WHITE: u32 = 0xffffff;
 pub const GREEN: u32 = 0x00cc00;
@@ -207,15 +207,10 @@ pub fn draw_pkx(pkx: &impl Pkx, pkx_type: PkxType) {
     let nature = pkx.nature_t();
     let nature_stat = nature_stat(nature);
 
-    // Which Dunsparce evolved form it will have if it's a Dunsparce
-    let dunsparce_segments = if pkx.species() == 206 {
-        if pkx.encryption_constant() % 100 == 0 {
-            "(3-seg)"
-        } else {
-            "(2-seg)"
-        }
-    } else {
-        ""
+    let dunsparce_segments = match pkx.species_t() {
+        Species::Dunsparce if pkx.encryption_constant() % 100 == 0 => "(3-seg)",
+        Species::Dunsparce => "(2-seg)",
+        _ => "",
     };
 
     pnp::println!("{} {} {}", nature, species, dunsparce_segments);
